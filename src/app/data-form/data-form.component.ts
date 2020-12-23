@@ -26,6 +26,13 @@ export class DataFormComponent implements OnInit {
     this.formulario = this.formBuilder.group({
       nome: [null, [Validators.required, Validators.min(3)]],
       email: [null, [Validators.required, Validators.email]],
+      cep: [null, Validators.required],
+      rua: [null, Validators.required],
+      complemento: [null],
+      estado: [null, Validators.required],
+      numero: [null, Validators.required],
+      cidade: [null, Validators.required],
+      bairro: [null, Validators.required],
     })
 
   }
@@ -45,14 +52,14 @@ export class DataFormComponent implements OnInit {
     this.formulario.reset();
   }
 
-  aplicaCssErro(campo: NgModel) {
+  aplicaCssErro(campo: string) {
     return {
       'has-error': this.verificaValidTouched(campo),
       'has-feedback': this.verificaValidTouched(campo)
     }
   }
 
-  verificaValidTouched(campo: NgModel) {
+  verificaValidTouched(campo: string) {
     return this.formulario.get(campo)?.valid && this.formulario.get(campo)?.touched;
     // return !campo.valid && campo.touched
   }
