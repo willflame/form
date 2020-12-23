@@ -2,6 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
+import { EstadoBr } from '../shared/models/estado-br.model';
+import { DropdownService } from '../shared/services/dropdown.service';
+
 @Component({
   selector: 'app-data-form',
   templateUrl: './data-form.component.html',
@@ -10,13 +13,16 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 export class DataFormComponent implements OnInit {
 
   formulario: FormGroup;
+  estados: any = [];
 
   constructor(
     private formBuilder: FormBuilder,
-    private http: HttpClient
+    private http: HttpClient,
+    private dropDownService: DropdownService
   ) { }
 
   ngOnInit(): void {
+    this.dropDownService.getEstadosBr().subscribe(dados => { this.estados = dados. }));
 
     // this.formulario = new FormGroup({
     //   nome: new FormControl(null),
@@ -29,7 +35,7 @@ export class DataFormComponent implements OnInit {
     this.formulario = this.formBuilder.group({
       nome: [null, [Validators.required, Validators.min(3)]],
       email: [null, [Validators.required, Validators.email]],
-      
+
       endereco: this.formBuilder.group({
         cep: [null, Validators.required],
         rua: [null, Validators.required],
@@ -39,7 +45,7 @@ export class DataFormComponent implements OnInit {
         cidade: [null, Validators.required],
         bairro: [null, Validators.required],
       })
-    })
+    });
 
   }
 
@@ -76,7 +82,7 @@ export class DataFormComponent implements OnInit {
     return {
       'has-error': this.verificaValidTouched(campo),
       'has-feedback': this.verificaValidTouched(campo)
-    }
+    };
   }
 
   verificaValidTouched(campo: string) {
@@ -88,36 +94,36 @@ export class DataFormComponent implements OnInit {
 
   consultaCEP() {
     let cep = this.formulario.get('endereco.cep')?.value;
-    //Nova variável "cep" somente com dígitos
+    // Nova variável "cep" somente com dígitos
     cep = cep.replace(/\D/g, '');
 
-    //Verifica se campo cep possui valor informado.
-    if (cep != "") {
-      //Expressão regular para validar o CEP.
-      var validacep = /^[0-9]{8}$/;
+    // Verifica se campo cep possui valor informado.
+    if (cep != '') {
+      // Expressão regular para validar o CEP.
+      let validacep = /^[0-9]{8}$/;
 
-      //Valida o formato do CEP.
-      if(validacep.test(cep)) {
+      // Valida o formato do CEP.
+      if (validacep.test(cep)) {
 
         this.resetaDadosForm();
 
         this.http.get(`//viacep.com.br/ws/${cep}/json`)
           .subscribe(dados => {
-            if(!("erro" in dados)){
+            if (!('erro' in dados)){
               this.popularDadosForm(dados);
             }else {
-              //CEP pesquisado não foi encontrado.
+              // CEP pesquisado não foi encontrado.
               this.resetaDadosForm();
-              alert("CEP não encontrado.");
+              alert('CEP não encontrado.');
             }
           });
       }else {
-        //cep é inválido.
+        // cep é inválido.
         this.resetaDadosForm();
         alert('formato de CEP inválido.');
       }
     } else {
-      //cep é inválido.
+      // cep é inválido.
       this.resetaDadosForm();
     }
   }
@@ -147,5 +153,5 @@ export class DataFormComponent implements OnInit {
         }
     });
   }
-  
+
 }

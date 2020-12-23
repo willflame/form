@@ -3,15 +3,15 @@ import { HttpClient } from '@angular/common/http';
 import { NgForm, NgModel } from '@angular/forms';
 
 interface FormTemplate {
-  nome: string | null,
-  email: string,
-  cep: string,
-  numero: string,
-  complemento: string,
-  rua: string,
-  bairro: string,
-  cidade: string,
-  estado: string,
+  nome: string | null;
+  email: string;
+  cep: string;
+  numero: string;
+  complemento: string;
+  rua: string;
+  bairro: string;
+  cidade: string;
+  estado: string;
 }
 
 // interface EndercoTemplate {
@@ -40,7 +40,7 @@ export class TemplateFormComponent implements OnInit {
     bairro: '',
     cidade: '',
     estado: ''
-  }
+  };
 
   constructor(
     private http: HttpClient
@@ -58,36 +58,36 @@ export class TemplateFormComponent implements OnInit {
   }
 
   consultaCEP(cep: string, form: NgForm) {
-    //Nova variável "cep" somente com dígitos
+    // Nova variável "cep" somente com dígitos
     cep = cep.replace(/\D/g, '');
 
-    //Verifica se campo cep possui valor informado.
-    if (cep != "") {
-      //Expressão regular para validar o CEP.
-      var validacep = /^[0-9]{8}$/;
+    // Verifica se campo cep possui valor informado.
+    if (cep != '') {
+      // Expressão regular para validar o CEP.
+      const validacep = /^[0-9]{8}$/;
 
-      //Valida o formato do CEP.
-      if(validacep.test(cep)) {
+      // Valida o formato do CEP.
+      if (validacep.test(cep)) {
 
         this.resetaDadosForm(form);
 
         this.http.get(`//viacep.com.br/ws/${cep}/json`)
           .subscribe(dados => {
-            if(!("erro" in dados)){
+            if (!('erro' in dados)){
               this.popularDadosForm(dados, form);
             }else {
-              //CEP pesquisado não foi encontrado.
+              // CEP pesquisado não foi encontrado.
               this.resetaDadosForm(form);
-              alert("CEP não encontrado.");
+              alert('CEP não encontrado.');
             }
           });
       }else {
-        //cep é inválido.
+        // cep é inválido.
         this.resetaDadosForm(form);
         alert('formato de CEP inválido.');
       }
     } else {
-      //cep é inválido.
+      // cep é inválido.
       this.resetaDadosForm(form);
     }
   }
@@ -108,7 +108,7 @@ export class TemplateFormComponent implements OnInit {
         //     }
         // });
 
-        formulario.form.patchValue({
+    formulario.form.patchValue({
             endereco: {
                 rua: dados.logradouro,
                 // cep: dados.cep,
@@ -134,13 +134,13 @@ export class TemplateFormComponent implements OnInit {
   }
 
   verificaValidTouched(campo: NgModel) {
-    return !campo.valid && campo.touched
+    return !campo.valid && campo.touched;
   }
 
   aplicaCssErro(campo: NgModel) {
     return {
       'has-error': this.verificaValidTouched(campo),
       'has-feedback': this.verificaValidTouched(campo)
-    }
+    };
   }
 }
