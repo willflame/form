@@ -44,5 +44,17 @@ export class DataFormComponent implements OnInit {
   resetar() {
     this.formulario.reset();
   }
+
+  aplicaCssErro(campo: NgModel) {
+    return {
+      'has-error': this.verificaValidTouched(campo),
+      'has-feedback': this.verificaValidTouched(campo)
+    }
+  }
+
+  verificaValidTouched(campo: NgModel) {
+    return this.formulario.get(campo)?.valid && this.formulario.get(campo)?.touched;
+    // return !campo.valid && campo.touched
+  }
   
 }
