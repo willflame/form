@@ -50,7 +50,8 @@
                 class="form-control" 
                 id="cep" 
                 formControlName="cep" 
-                placeholder="000.000-00"/>
+                placeholder="000.000-00"
+                (blur)="consultaCEP()"/>
             <app-campo-control-erro 
                 [mostrarErro]="verificaValidTouched('endereco.cep')"
                 menssageErro="CEP obrigatório">

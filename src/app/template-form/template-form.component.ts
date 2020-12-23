@@ -42,6 +42,13 @@ export class TemplateFormComponent implements OnInit {
     estado: ''
   }
 
+  constructor(
+    private http: HttpClient
+  ) { }
+
+  ngOnInit(): void {
+  }
+
   onSubmit(form: NgForm) {
     this.http.post('https://httpbin.org/post', JSON.stringify(form.value))
       .subscribe(dados => {
@@ -136,12 +143,4 @@ export class TemplateFormComponent implements OnInit {
       'has-feedback': this.verificaValidTouched(campo)
     }
   }
-
-  constructor(
-    private http: HttpClient
-  ) { }
-
-  ngOnInit(): void {
-  }
-
 }
