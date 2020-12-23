@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { EstadoBr } from '../shared/models/estado-br.model';
+import { ConsultaCepService } from '../shared/services/consulta-cep.service';
 import { DropdownService } from '../shared/services/dropdown.service';
 
 @Component({
@@ -18,11 +19,12 @@ export class DataFormComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private http: HttpClient,
-    private dropDownService: DropdownService
+    private dropDownService: DropdownService,
+    private cepService: ConsultaCepService
   ) { }
 
   ngOnInit(): void {
-    this.dropDownService.getEstadosBr().subscribe(dados => { this.estados = dados. }));
+    this.dropDownService.getEstadosBr().subscribe(dados =>  this.estados = dados);
 
     // this.formulario = new FormGroup({
     //   nome: new FormControl(null),
@@ -93,14 +95,11 @@ export class DataFormComponent implements OnInit {
   }
 
   consultaCEP() {
-    let cep = this.formulario.get('endereco.cep')?.value;
-    // Nova variável "cep" somente com dígitos
-    cep = cep.replace(/\D/g, '');
+    const cep = this.formulario.get('endereco.cep')?.value;
 
-    // Verifica se campo cep possui valor informado.
-    if (cep != '') {
-      // Expressão regular para validar o CEP.
-      let validacep = /^[0-9]{8}$/;
+    if (cep != null && cep!== '') {
+      this.cepService.consultaCEP(cep);
+    }
 
       // Valida o formato do CEP.
       if (validacep.test(cep)) {
