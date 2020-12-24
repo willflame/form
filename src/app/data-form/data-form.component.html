@@ -161,6 +161,14 @@
             <option *ngFor="let tecnologia of tecnologias" [value]="tecnologia.nome">{{ tecnologia.desc }}</option>
         </select>
     </div>
+    <div class="form-group" [ngClass]="aplicaCssErro('newsletter')">
+        <label for="newsletter">Tecnologias</label>
+        <div *ngFor="let item of newsletterOp">
+            <label>
+                <input type="radio" [value]="item.valor" formControlName="newsletter"> {{ item.desc }}
+            </label>
+        </div>
+    </div>
     <button type="submit" class="btn btn-primery">Submit</button>
     <button  class="btn" (click)="resetar()">Cancelar</button>
     <button  class="btn" (click)="setarCargo()">Setar Cargo</button>
