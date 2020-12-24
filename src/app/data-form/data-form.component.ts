@@ -97,33 +97,16 @@ export class DataFormComponent implements OnInit {
   consultaCEP() {
     const cep = this.formulario.get('endereco.cep')?.value;
 
-    if (cep != null && cep!== '') {
-      this.cepService.consultaCEP(cep);
-    }
-
-      // Valida o formato do CEP.
-      if (validacep.test(cep)) {
-
-        this.resetaDadosForm();
-
-        this.http.get(`//viacep.com.br/ws/${cep}/json`)
-          .subscribe(dados => {
-            if (!('erro' in dados)){
-              this.popularDadosForm(dados);
-            }else {
-              // CEP pesquisado não foi encontrado.
-              this.resetaDadosForm();
-              alert('CEP não encontrado.');
-            }
-          });
-      }else {
-        // cep é inválido.
-        this.resetaDadosForm();
-        alert('formato de CEP inválido.');
-      }
-    } else {
-      // cep é inválido.
-      this.resetaDadosForm();
+    if (cep != null && cep !== '') {
+      this.cepService.consultaCEP(cep)?.subscribe(dados => {
+        if (!('erro' in dados)){
+          this.popularDadosForm(dados);
+        }else {
+          // CEP pesquisado não foi encontrado.
+          this.resetaDadosForm();
+          alert('CEP não encontrado.');
+        }
+      });
     }
   }
 

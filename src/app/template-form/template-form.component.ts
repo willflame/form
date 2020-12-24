@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm, NgModel } from '@angular/forms';
+import { ConsultaCepService } from '../shared/services/consulta-cep.service';
 
 interface FormTemplate {
   nome: string | null;
@@ -43,7 +44,8 @@ export class TemplateFormComponent implements OnInit {
   };
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private cepService: ConsultaCepService
   ) { }
 
   ngOnInit(): void {
@@ -61,34 +63,16 @@ export class TemplateFormComponent implements OnInit {
     // Nova variável "cep" somente com dígitos
     cep = cep.replace(/\D/g, '');
 
-    // Verifica se campo cep possui valor informado.
-    if (cep != '') {
-      // Expressão regular para validar o CEP.
-      const validacep = /^[0-9]{8}$/;
-
-      // Valida o formato do CEP.
-      if (validacep.test(cep)) {
-
-        this.resetaDadosForm(form);
-
-        this.http.get(`//viacep.com.br/ws/${cep}/json`)
-          .subscribe(dados => {
-            if (!('erro' in dados)){
-              this.popularDadosForm(dados, form);
-            }else {
-              // CEP pesquisado não foi encontrado.
-              this.resetaDadosForm(form);
-              alert('CEP não encontrado.');
-            }
-          });
-      }else {
-        // cep é inválido.
-        this.resetaDadosForm(form);
-        alert('formato de CEP inválido.');
-      }
-    } else {
-      // cep é inválido.
-      this.resetaDadosForm(form);
+    if (cep != null && cep !== '') {
+      this.cepService.consultaCEP(cep)?.subscribe(dados => {
+        if (!('erro' in dados)){
+          this.popularDadosForm(dados, form);
+        }else {
+          // CEP pesquisado não foi encontrado.
+          this.resetaDadosForm(form);
+          alert('CEP não encontrado.');
+        }
+      });
     }
   }
 
