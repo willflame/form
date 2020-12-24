@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 
 import { EstadoBr } from '../shared/models/estado-br.model';
@@ -75,11 +75,29 @@ export class DataFormComponent implements OnInit {
   buildFrameworks() {
     const values = this.frameworks.map(v => new FormControl(false));
 
-    return this.formBuilder.array(values);
+    return this.formBuilder.array(values, this.requeredMinCheckbox(1));
 
     // return [
     //   new FormControl(false),
     // ]
+  }
+
+  requeredMinCheckbox(min:number =  1) {
+    const validator = (formArray: FormArray) => {
+      // const values = formArray.controls;
+      // const totalChecked = 0;
+      // for (let i = 0; i < values.length; i++) {
+      //   if (values[i].value) {
+      //     totalChecked += 1;
+      //   }
+      // }
+
+      const totalChecked = formArray.controls
+        .map(v => v.value)
+        .reduce((total, current) => current ? total + current : total , 0);
+      return totalChecked >= min ? null : { required: true };
+    }
+    return validator;
   }
 
   onSubmit() {
