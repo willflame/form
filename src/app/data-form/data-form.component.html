@@ -140,8 +140,20 @@
             </app-campo-control-erro>
         </div>
     </div>
+    <div class="form-group" [ngClass]="aplicaCssErro('cargo')">
+        <label for="cargo">Cargo</label>
+        <select 
+            class="form-control" 
+            id="cargo" 
+            formControlName="cargo" 
+            placeholder="Cargo"
+            [compareWith]="compararCargos">
+            <option *ngFor="let cargo of cargos" [ngValue]="cargo">{{ cargo.desc }}</option>
+        </select>
+    </div>
     <button type="submit" class="btn btn-primery">Submit</button>
     <button  class="btn" (click)="resetar()">Cancelar</button>
+    <button  class="btn" (click)="setarCargo()">Cargo</button>
 
      <app-form-debug [form]="formulario"></app-form-debug>
 </form>
