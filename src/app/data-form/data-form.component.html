@@ -181,6 +181,19 @@
                 menssageErro="Por favor aceite os termos">
         </app-campo-control-erro>
     </div>
+    <div class="form-group" [ngClass]="aplicaCssErro('frameworks')">
+        <label for="frameworks">Frameworks</label>
+        <div [ngClass]="aplicaCssErro('frameworks')" formArrayName="frameworks"
+            *ngFor="let item of formulario.get('frameworks').controls; let i = index">
+            <label>
+                <input type="checkbox" [formControlName]="i">{{ frameworks[i] }}
+            </label>
+        </div>
+        <app-campo-control-erro 
+                [mostrarErro]="verificaValidTouched('termos')"
+                menssageErro="Por favor aceite os termos">
+        </app-campo-control-erro>
+    </div>
     <button type="submit" class="btn btn-primery">Submit</button>
     <button  class="btn" (click)="resetar()">Cancelar</button>
     <button  class="btn" (click)="setarCargo()">Setar Cargo</button>
